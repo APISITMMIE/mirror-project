@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Widget - OpenWeatherMap API</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #000; /* Black background */
+            color: #FFF; /* White text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .weather-widget {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .weather-icon {
+            margin: 20px 0;
+        }
+
+        .weather-location {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .weather-details {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .other-info {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="weather-widget">
+        <div class="weather-location" id="location">Loading location...</div>
+        <img src="" alt="Weather Icon" class="weather-icon" id="weather-icon">
+        <div class="weather-status" id="weather-status">Loading weather...</div>
+        <div class="weather-details">
+            <div class="temperature" id="temperature">--°C</div>
+            <div class="other-info">
+                <div>Humidity: <span id="humidity">--%</span></div>
+                <div>Wind: <span id="wind">-- m/s</span></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const apiKey = 'b7ddd60ce991ae52d1a910c6b4d530bf'; // Use your actual OpenWeatherMap API key
+        const latitude = 14.035329278992565;
+        const longitude = 100.72781899530295;
+
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const iconUrl = `https://openweathermap.org/img/wn/${data.weather[0].icon}.png`;
+                document.getElementById('location').textContent = `${data.name}, ${data.sys.country}`;
+                document.getElementById('weather-icon').setAttribute('src', iconUrl);
+                document.getElementById('weather-icon').setAttribute('alt', data.weather[0].description);
+                document.getElementById('weather-status').textContent = data.weather[0].main;
+                document.getElementById('temperature').textContent = `${data.main.temp}°C`;
+                document.getElementById('humidity').textContent = `${data.main.humidity}%`;
+                document.getElementById('wind').textContent = `${data.wind.speed} m/s`;
+            })
+            .catch(error => console.error('Error:', error));
+    </script>
+</body>
+</html>

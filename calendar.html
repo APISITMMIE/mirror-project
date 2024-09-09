@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimalist Calendar Widget</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #000; /* Black background */
+            color: #FFF; /* White text */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .calendar-widget {
+            padding: 20px;
+            text-align: center;
+            width: 300px; /* Adjust width as necessary */
+        }
+
+        .calendar-header {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .calendar-body {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr); /* 7 days in a week */
+            gap: 5px;
+        }
+
+        .day {
+            padding: 10px 0;
+        }
+
+        /* Highlighting the current day */
+        .today {
+            background-color: #222; /* Slightly highlighted */
+            border-radius: 50%; /* Circular highlight for the current day */
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr); /* 7 days in a week */
+            margin-bottom: 5px;
+            color: rgb(255, 255, 255)/* Red color for the weekdays */
+        }        
+    </style>
+</head>
+<body>
+    <div class="calendar-widget">
+        <div class="calendar-header" id="monthYear"></div>
+        <div class="calendar-weekdays" id="calendarWeekdays"></div>
+        <div class="calendar-body" id="calendarDays"></div>
+    </div>
+    <script>
+        function generateCalendar() {
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+            const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+            // Locale-specific month and year format
+            document.getElementById('monthYear').textContent = today.toLocaleString('default', { month: 'long' }) + ' ' + currentYear;
+
+            const calendarDays = document.getElementById('calendarDays');
+            calendarDays.innerHTML = ''; // Clear previous children
+
+            // Generate days of the week
+            for (let i = 0; i < firstDayOfMonth.getDay(); i++) {
+                const cell = document.createElement('div');
+                calendarDays.appendChild(cell);
+            }
+
+                        // Populate the weekdays
+             const calendarWeekdays = document.getElementById('calendarWeekdays');
+            calendarWeekdays.innerHTML = ''; // Clear previous children
+            weekdays.forEach(day => {
+                const weekdayDiv = document.createElement('div');
+                weekdayDiv.textContent = day;
+                calendarWeekdays.appendChild(weekdayDiv);
+            });
+
+            // Generate days in month
+            for (let i = 1; i <= daysInMonth; i++) {
+                const cell = document.createElement('div');
+                cell.textContent = i;
+                cell.className = 'day';
+                if (i === today.getDate() && currentMonth === today.getMonth()) {
+                    cell.classList.add('today');
+                }
+                calendarDays.appendChild(cell);
+            }
+        }
+
+        // Initial call to generate the calendar
+        generateCalendar();
+    </script>
+</body>
+</html>
